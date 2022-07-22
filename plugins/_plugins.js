@@ -1,38 +1,63 @@
-/* Copyright (C) 2021 TENUX-Neotro.
-Licensed under the  GPL-3.0 License;
-you may not use this file except in compliance with the License.
-NEOTROX - TEENUHX
-*/
-
-const Neotro = require('../events');
-const Heroku = require('heroku-client');
+const evt = require('../events');
 const Config = require('../config');
-const config = require('../config');
-const cosec = require('../cosec');
-const {MessageType} = require('@adiwajshing/baileys');
 const got = require('got');
 const fs = require('fs');
-const Db = require('./sql/plugin');
+//const Db = require('./sql/plugin');
 const Language = require('../language');
 const Lang = Language.getString('_plugin');
-const NLang = Language.getString('updater');
-
-let msg = Config.LANG == 'SI' || Config.LANG == 'AZ' ? '*අනුමත කරනලද ප්ලගීනයකි..!* ✅' : '*Approved plugin.* ✅'
-let inmsg = Config.LANG == 'SI' || Config.LANG == 'AZ' ? '*අනුමත නොකරණ ලද ප්ලගීනකි..!* ❌' : '*Not Approved Plugin.* ❌'
-
-const heroku = new Heroku({
-    token: cosec.HEROKU.API_KEY
-});
+//var Plugdb = require('./sql/plugindb')
+//let json = require('jsonfile');
 
 
-let baseURI = '/apps/' + cosec.HEROKU.APP_NAME;
+/*
 
-Neotro.addCommand({pattern: 'install ?(.*)', fromMe: true, desc: Lang.INSTALL_DESC, warn: Lang.WARN}, (async (message, match) => {
-    if (match[1] === '') return message.client.sendMessage(config.LOG, { text:Lang.NEED_URL + '.install https://gist.github.com/Neotro23/4232b1c8c4734e1f06c3d991149c6fbd'})
+async function installlplugin( plugin_name , url){
+try {
+
+if (fs.existsSync('./sql/pluginbase.json')){
+const pdl = require('./sql/pluginbase')
+const plugindb = { 'name': plugin_name ,'url' : url } 
+pdl.Plugins.push(plugindb);
+json.writeFile('./sql/pluginbase.json', pdl);
+
+}else{
+  
+const plugindb = { 'name': plugin_name ,'url' : url } 
+Plugdb.Plugins.push(plugindb);
+json.writeFile('./sql/pluginbase.json', Plugdb);
+        
+}
+
+}catch{
+    
+const plugindb = { 'name': plugin_name ,'url' : url } 
+Plugdb.Plugins.push(plugindb);
+json.writeFile('./sql/pluginbase.json', Plugdb);*/
+    
+if (fs.existsSync('./sql/pluginbase.json')){
+const pdl = require('./sql/pluginbase')
+const plugindb = { 'name': plugin_name ,'url' : url }
+ pdl.Plugins.push(plugindb);
+json.writeFile('./sql/pluginbase.json', pdl);
+
+}else{ 
+  const plugindb = { 'name': plugin_name ,'url' : url }
+  Plugdb.Plugins.push(plugindb);
+  json.writeFile('./sql/pluginbase.json', Plugdb);
+}
+}
+
+}
+
+*/
+
+
+evt.addCommand({pattern: 'pkg ?(.*)', fromMe: true, desc: "install plugins", usage: '.install https://gist.github.com/Quiec/cd5af0c153a613ba55c24f8c6b6f5565'}, (async (message, match) => {
+    if (match[1] === '') return await message.client.sendMessage(message.jid , { text : '```Need url .install https://gist.github.com/Quiec/cd5af0c153a613ba55c24f8c6b6f5565```'})
     try {
         var url = new URL(match[1]);
     } catch {
-        return message.client.sendMessage(config.LOG, { text:Lang.INVALID_URL});
+        return await message.client.sendMessage(message.jid , { text : "invalid url🥲"});
     }
     
     if (url.host === 'gist.github.com') {
@@ -45,26 +70,28 @@ Neotro.addCommand({pattern: 'install ?(.*)', fromMe: true, desc: Lang.INSTALL_DE
     var response = await got(url);
     if (response.statusCode == 200) {
         // plugin adı
-        var plugin_name = response.body.match(/addCommand\({.*pattern: ["'](.*)["'].*}/);
+        var plugin_name = response.body.match(/getCMD\({.*pattern: ["'](.*)["'].*}/);
         if (plugin_name.length >= 1) {
-            plugin_name = "." + plugin_name[1];
+            plugin_name = "__" + plugin_name[1];
         } else {
-            plugin_name = "." + Math.random().toString(36).substring(8);
+            plugin_name = "__" + Math.random().toString(36).substring(8);
         }
 
         fs.writeFileSync('./plugins/' + plugin_name + '.js', response.body);
-        try {
+       try {
             require('./' + plugin_name);
         } catch (e) {
-            fs.unlinkSync('/root/queendianamd/plugins/' + plugin_name + '.js')
-            return message.client.sendMessage(config.LOG, { text:Lang.INVALID_PLUGIN + ' ```' + e + '```'});
+            fs.unlinkSync('./' + plugin_name);
+            return await message.client.sendMessage(message.jid , { text : "Invalid plugin \n" + ' ```' + e + '```'});
         }
 
-        //await Db.installPlugin(url, plugin_name);
-        message.client.sendMessage(config.LOG, { text: Lang.INSTALLED});
-        if (!match[1].includes('Neotro23')) {
-            await new Promise(r => setTimeout(r, 400));
-            await message.client.sendMessage(config.LOG, { text: Lang.UNOFF});
-        }
+      
+      //  await installlplugin( plugin_name , url)
+       
+         await message.client.sendMessage(message.jid,  { text:  'plugin add to data base' });
+       await message.client.sendMessage(message.jid, { text: 'plugin installed' });
+                   console.log('plugin add to data base')                                      
+     
+       
     }
 }));
