@@ -32,7 +32,7 @@ json.writeFile('./sql/pluginbase.json', Plugdb);
     
 const plugindb = { 'name': plugin_name ,'url' : url } 
 Plugdb.Plugins.push(plugindb);
-json.writeFile('./sql/pluginbase.json', Plugdb);*/
+json.writeFile('./sql/pluginbase.json', Plugdb);
     
 if (fs.existsSync('./sql/pluginbase.json')){
 const pdl = require('./sql/pluginbase')
