@@ -6,6 +6,7 @@ NEOTROX - TEENUHX
 
 const config = require('../../cosec');
 const { DataTypes } = require('sequelize');
+
 const PluginDB = config.DATABASE.define('Plugin', {
     name: {
         type: DataTypes.STRING,
