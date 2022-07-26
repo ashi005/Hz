@@ -9,7 +9,7 @@ const fs = require("fs");
 const path = require("path");
 const events = require("./events");
 const chalk = require('chalk');
-const config = require('./config');
+const Axzi = require('./Axzi');
 const cosec = require('./cosec')
 const { Message, Image, Video, StringSession } = require('./diana/');
 const { DataTypes } = require('sequelize');
@@ -86,12 +86,12 @@ async function DIANASTT() {
 
         console.log(chalk.green.bold('𝚀𝚄𝙴𝙴𝙽 𝙳𝙸𝙰𝙽𝙰 𝚆𝙰 𝙱𝙾𝚃 𝚁𝚄𝙽𝙽𝙸𝙽𝙶🥲...'));
 
-        console.log(chalk.white.bold(' Version: ' + config.VERSION));
+        console.log(chalk.white.bold(' Version: ' + Axzi.VERSION));
         
         console.log(chalk.green.bold(' Connecting to WhatsApp-Beta Web...'));
 
        /* const session = new StringSession();
-        session.CreateAuthJson(config.SESSION);*/
+        session.CreateAuthJson(Axzi.SESSION);*/
 //=============================================================================================================================
 const conn = makeWASocket({
     logger: pino({level: 'silent'}),
@@ -163,13 +163,13 @@ plugins.map(async (plugin) => {
 
 
         //await new Promise(r => setTimeout(r, 100));
-        let wtype = config.WORKTYPE == 'public' ? 'Public' : 'Private'
+        let wtype = Axzi.WORKTYPE == 'public' ? 'Public' : 'Private'
         console.log(chalk.bgGreen('𝚀𝚄𝙴𝙴𝙽 𝙳𝙸𝙰𝙽𝙰 𝚠𝚘𝚛𝚔𝚒𝚗𝚐 ' + wtype));
 
         
          
             var up_ch = "bot working now"
-            await conn.sendMessage(config.LOG, { text: up_ch });
+            await conn.sendMessage(Axzi.LOG, { text: up_ch });
             
         
     }
@@ -221,15 +221,15 @@ plugins.map(async (plugin) => {
 
         if (msg.key && msg.key.remoteJid == 'status@broadcast') return; // WhatsApp Status
 
-        if (config.NO_ONLINE) {
+        if (Axzi.NO_ONLINE) {
             await conn.sendPresenceUpdate('unavailable', msg.key.remoteJid);
         }
         // ==================== Greetings ========================
         // ==================== End Greetings ====================
 
         // ==================== Blocked Chats ====================
-        if (config.BLOCKCHAT !== false) {
-            var abc = config.BLOCKCHAT.split(',');
+        if (Axzi.BLOCKCHAT !== false) {
+            var abc = Axzi.BLOCKCHAT.split(',');
             if (msg.key.remoteJid.includes('@g.us') ? abc.includes(msg.key.remoteJid.split('@')[0]) : abc.includes(msg.participant ? msg.participant.split('@')[0] : msg.key.remoteJid.split('@')[0])) return;
         }
 
@@ -257,9 +257,9 @@ plugins.map(async (plugin) => {
 
                 let sendMsg = false;
 
-                if ((config.SUDO !== false && msg.key.fromMe === false && command.fromMe === true && (msg.participant && config.SUDO.includes(',') ? config.SUDO.split(',')
-                    .includes(msg.participant.split('@')[0]) : msg.participant.split('@')[0] == config.SUDO || config.SUDO.includes(',') ? config.SUDO.split(',')
-                    .includes(msg.key.remoteJid.split('@')[0]) : msg.key.remoteJid.split('@')[0] == config.SUDO)) || command.fromMe === msg.key.fromMe || (command.fromMe === false && !msg.key.fromMe)) {
+                if ((Axzi.SUDO !== false && msg.key.fromMe === false && command.fromMe === true && (msg.participant && Axzi.SUDO.includes(',') ? Axzi.SUDO.split(',')
+                    .includes(msg.participant.split('@')[0]) : msg.participant.split('@')[0] == Axzi.SUDO || Axzi.SUDO.includes(',') ? Axzi.SUDO.split(',')
+                    .includes(msg.key.remoteJid.split('@')[0]) : msg.key.remoteJid.split('@')[0] == Axzi.SUDO)) || command.fromMe === msg.key.fromMe || (command.fromMe === false && !msg.key.fromMe)) {
                     if (!command.onlyPm === msg.key.remoteJid.includes('@g.us')) sendMsg = true;
                     else if (command.onlyGroup === msg.key.remoteJid.includes('@g.us')) sendMsg = true;
                 }
@@ -273,7 +273,7 @@ plugins.map(async (plugin) => {
 
                 // ==================== Message Catcher ====================
                 if (sendMsg) {
-                    if (config.SEND_READ && command.on === undefined) {
+                    if (Axzi.SEND_READ && command.on === undefined) {
                         await conn.chatRead(msg.key.remoteJid);
                     }
                     var match = text_msg.match(command.pattern);
@@ -297,130 +297,130 @@ plugins.map(async (plugin) => {
 
                         function(Diamymsg, match);
                     } catch (error) {
-                        if (config.NOLOG == 'true') return;
-                        if (config.LANG == 'SI') {
-                            await conn.sendMessage(config.LOG, {
+                        if (Axzi.NOLOG == 'true') return;
+                        if (Axzi.LANG == 'SI') {
+                            await conn.sendMessage(Axzi.LOG, {
                                 text: '*🔭 දෝෂ වාර්තාව [ D I A N A ] 📨*\n'  + '\n*දෝෂය:* ```' + error + '```\n\n'
                             });
                             if (error.message.includes('URL')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🚀 දෝෂ විශ්ලේෂණය [ D I A N A ] 🚧*\n\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 ප්‍රධාන දෝෂය:* _Only Absolutely URLs Supported_' + '\n*⚖️ හේතුව:* _The usage of media tools (xmedia, sticker..) in the LOG number._' + '\n*🛡️ විසඳුම:* _You can use commands in any chat, except the LOG number._'
                                 });
                             } else if (error.message.includes('conversation')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🚀 දෝෂ විශ්ලේෂණය [ D I A N A ] 🚧*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 ප්‍රධාන දෝෂය:* _Deleting Plugin_' + '\n*⚖️ හේතුව:* _Entering incorrectly the name of the plugin wanted to be deleted._' + '\n*🛡️ විසඳුම:* _Please try without adding_ *__* _to the plugin you want to delete. If you still get an error, try to add like_ ```?(.*) / $``` _to the end of the name._ '
                                 });
                             } else if (error.message.includes('split')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🚀 දෝෂ විශ්ලේෂණය [ D I A N A ] 🚧*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 ප්‍රධාන දෝෂය:* _Split of Undefined_' + '\n*⚖️ හේතුව:* _Commands that can be used by group admins occasionally dont see the split function._ ' + '\n*🛡️ විසඳුම:* _Restarting will be enough._'
                                 });
                             } else if (error.message.includes('SSL')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🚀 දෝෂ විශ්ලේෂණය [ D I A N A ] 🚧*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 ප්‍රධාන දෝෂය:* _SQL Database Error_' + '\n*⚖️ හේතුව:* _Database corruption._ ' + '\n*🛡️ විසඳුම:* _There is no known solution. You can try reinstalling it._'
                                 });
                             } else if (error.message.includes('Ookla')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🚀 දෝෂ විශ්ලේෂණය [ D I A N A ] 🚧*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 ප්‍රධාන දෝෂය:* _Ookla Server Connection_' + '\n*⚖️ හේතුව:* _Speedtest data cannot be transmitted to the server._' + '\n*🛡️ විසඳුම:* _If you use it one more time the problem will be solved._'
                                 });
                             } else if (error.message.includes('params')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🚀 දෝෂ විශ්ලේෂණය [ D I A N A ] 🚧*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 ප්‍රධාන දෝෂය:* _Requested Audio Params_' + '\n*⚖️ හේතුව:* _Using the TTS command outside the Latin alphabet._' + '\n*🛡️ විසඳුම:* _The problem will be solved if you use the command in Latin letters frame._'
                                 });
                             } else if (error.message.includes('unlink')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🚀 දෝෂ විශ්ලේෂණය [ D I A N A ] 🚧*\n' + '\n========== ```Error Resolved``` ==========' + '\n\n*🛠 ප්‍රධාන දෝෂය:* _No Such File or Directory_' + '\n*⚖️ හේතුව:* _Incorrect coding of the plugin._' + '\n*🛡️ විසඳුම:* _Please check the your plugin codes._'
                                 });
                             } else if (error.message.includes('404')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🚀 දෝෂ විශ්ලේෂණය [ D I A N A ] 🚧*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 ප්‍රධාන දෝෂය:* _Error 404 HTTPS_' + '\n*⚖️ හේතුව:* _Failure to communicate with the server as a result of using the commands under the Heroku plugin._' + '\n*🛡️ විසඳුම:* _Wait a while and try again. If you still get the error, perform the transaction on the website.._'
                                 });
                             } else if (error.message.includes('reply.delete')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🚀 දෝෂ විශ්ලේෂණය [ D I A N A ] 🚧*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 ප්‍රධාන දෝෂය:* _Reply Delete Function_' + '\n*⚖️ හේතුව:* _Using IMG or Wiki commands._' + '\n*🛡️ විසඳුම:* _There is no solution for this error. It is not a fatal error._'
                                 });
                             } else if (error.message.includes('load.delete')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🚀 දෝෂ විශ්ලේෂණය [ D I A N A ] 🚧*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 ප්‍රධාන දෝෂය:* _Reply Delete Function_' + '\n*⚖️ හේතුව:* _Using IMG or Wiki commands._' + '\n*🛡️ විසඳුම:* _There is no solution for this error. It is not a fatal error._'
                                 });
                             } else if (error.message.includes('400')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🚀 දෝෂ විශ්ලේෂණය [ D I A N A ] 🚧*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 ප්‍රධාන දෝෂය:* _Bailyes Action Error_ ' + '\n*⚖️ හේතුව:* _The exact reason is unknown. More than one option may have triggered this error._' + '\n*🛡️ විසඳුම:* _If you use it again, it may improve. If the error continues, you can try to restart._'
                                 });
                             } else if (error.message.includes('decode')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🚀 දෝෂ විශ්ලේෂණය [ D I A N A ] 🚧*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 ප්‍රධාන දෝෂය:* _Cannot Decode Text or Media_' + '\n*⚖️ හේතුව:* _Incorrect use of the plug._' + '\n*🛡️ විසඳුම:* _Please use the commands as written in the plugin description._'
                                 });
                             } else if (error.message.includes('unescaped')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🚀 දෝෂ විශ්ලේෂණය [ D I A N A ] 🚧*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 ප්‍රධාන දෝෂය:* _Word Character Usage_' + '\n*⚖️ හේතුව:* _Using commands such as TTP, ATTP outside the Latin alphabet._' + '\n*🛡️ විසඳුම:* _The problem will be solved if you use the command in Latin alphabet.._'
                                 });
                             } else {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🙇🏻 සමාවන්න! මට මෙම දෝශය කියවිය නොහැක 🙇🏻*' + '\n_උපසදෙස් සඳහා ඔබට අපගේ සහය කන්ඩායමට එක්විය හැහ_'
                                 });
                             }
                         } else {
-                            await conn.sendMessage(config.LOG, {
+                            await conn.sendMessage(Axzi.LOG, {
                                 text: '*🔭 ERROR REPORT [ D I A N A ] ⚖️*\n' + '*Error:* ```' + error + '```\n\n'
                             }, {
                                 detectLinks: false
                             });
                             if (error.message.includes('URL')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🔭 ᴇʀʀᴏʀ ᴀɴᴀʟʏsɪs [ D I A N A ] 📊*\n\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 Main Error:* _Only Absolutely URLs Supported_' + '\n*⚖️ Reason:* _The usage of media tools (xmedia, sticker..) in the LOG number._' + '\n*🛡️ Solution:* _You can use commands in any chat, except the LOG number._'
                                 });
                             } else if (error.message.includes('conversation')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🔭 ᴇʀʀᴏʀ ᴀɴᴀʟʏsɪs [ D I A N A ] 📊*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 Main Error:* _Deleting Plugin_' + '\n*⚖️ Reason:* _Entering incorrectly the name of the plugin wanted to be deleted._' + '\n*🛡️ Solution:* _Please try without adding_ *__* _to the plugin you want to delete. If you still get an error, try to add like_ ```?(.*) / $``` _to the end of the name._ '
                                 });
                             } else if (error.message.includes('split')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🔭 ᴇʀʀᴏʀ ᴀɴᴀʟʏsɪs [ D I A N A ] 📊*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 Main Error:* _Split of Undefined_' + '\n*⚖️ Reason:* _Commands that can be used by group admins occasionally dont see the split function._ ' + '\n*🛡️ Solution:* _Restarting will be enough._'
                                 });
                             } else if (error.message.includes('SSL')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🔭 ᴇʀʀᴏʀ ᴀɴᴀʟʏsɪs [ D I A N A ] 📊*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 Main Error:* _SQL Database Error_' + '\n*⚖️ Reason:* _Database corruption._ ' + '\n*🛡️ Solution:* _There is no known solution. You can try reinstalling it._'
                                 });
                             } else if (error.message.includes('Ookla')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🔭 ᴇʀʀᴏʀ ᴀɴᴀʟʏsɪs [ D I A N A ] 📊*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 Main Error:* _Ookla Server Connection_' + '\n*⚖️ Reason:* _Speedtest data cannot be transmitted to the server._' + '\n*🛡️ Solution:* _If you use it one more time the problem will be solved._'
                                 });
                             } else if (error.message.includes('params')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🔭 ᴇʀʀᴏʀ ᴀɴᴀʟʏsɪs [ D I A N A ] 📊*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 Main Error:* _Requested Audio Params_' + '\n*⚖️ Reason:* _Using the TTS command outside the Latin alphabet._' + '\n*🛡️ Solution:* _The problem will be solved if you use the command in Latin letters frame._'
                                 });
                             } else if (error.message.includes('unlink')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🔭 ᴇʀʀᴏʀ ᴀɴᴀʟʏsɪs [ D I A N A ] 📊*\n' + '\n========== ```Error Resolved``` ==========' + '\n\n*🛠 Main Error:* _No Such File or Directory_' + '\n*⚖️ Reason:* _Incorrect coding of the plugin._' + '\n*🛡️ Solution:* _Please check the your plugin codes._'
                                 });
                             } else if (error.message.includes('404')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🔭 ᴇʀʀᴏʀ ᴀɴᴀʟʏsɪs [ D I A N A ] 📊*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 Main Error:* _Error 404 HTTPS_' + '\n*⚖️ Reason:* _Failure to communicate with the server as a result of using the commands under the Heroku plugin._' + '\n*🛡️ Solution:* _Wait a while and try again. If you still get the error, perform the transaction on the website.._'
                                 });
                             } else if (error.message.includes('reply.delete')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🔭 ᴇʀʀᴏʀ ᴀɴᴀʟʏsɪs [ D I A N A ] 📊*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 Main Error:* _Reply Delete Function_' + '\n*⚖️ Reason:* _Using IMG or Wiki commands._' + '\n*🛡️ Solution:* _There is no solution for this error. It is not a fatal error._'
                                 });
                             } else if (error.message.includes('load.delete')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🔭 ᴇʀʀᴏʀ ᴀɴᴀʟʏsɪs [ D I A N A ] 📊*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 Main Error:* _Reply Delete Function_' + '\n*⚖️ Reason:* _Using IMG or Wiki commands._' + '\n*🛡️ Solution:* _There is no solution for this error. It is not a fatal error._'
                                 });
                             } else if (error.message.includes('400')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🔭 ᴇʀʀᴏʀ ᴀɴᴀʟʏsɪs [ D I A N A ] 📊*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 Main Error:* _Bailyes Action Error_ ' + '\n*⚖️ Reason:* _The exact reason is unknown. More than one option may have triggered this error._' + '\n*🛡️ Solution:* _If you use it again, it may improve. If the error continues, you can try to restart._'
                                 });
                             } else if (error.message.includes('decode')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🔭 ᴇʀʀᴏʀ ᴀɴᴀʟʏsɪs [ D I A N A ] 📊*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 Main Error:* _Cannot Decode Text or Media_' +
 
                                     '\n*⚖️ Reason:* _Incorrect use of the plug._' + '\n*🛡️ Solution:* _Please use the commands as written in the plugin description._'
                                 });
                             } else if (error.message.includes('unescaped')) {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🔭 ᴇʀʀᴏʀ ᴀɴᴀʟʏsɪs [ D I A N A ] 📊*\n' + '\n========== _Error Resolved!_ ==========' + '\n\n*🛠 Main Error:* _Word Character Usage_' + '\n*⚖️ Reason:* _Using commands such as TTP, ATTP outside the Latin alphabet._' + '\n*🛡️ Solution:* _The problem will be solved if you use the command in Latin alphabet.._'
                                 });
                             } else {
-                                return await conn.sendMessage(config.LOG, {
+                                return await conn.sendMessage(Axzi.LOG, {
                                     text: '*🙇🏻 Sorry, I Couldnt Read This Error! 🙇🏻*' + '\n_You can write to our support group for more help._'
                                 });
                             }
