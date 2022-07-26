@@ -1,5 +1,5 @@
-//const evt = require('../events');
-const // Config = require('../config');
+const evt = require('../events');
+const Config = require('../config');
 const got = require('got');
 const fs = require('fs');
 //const Db = require('./sql/plugin');
