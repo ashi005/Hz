@@ -50,6 +50,20 @@
             "INVITE_DESC": "Provides the group's invitation link.",
             "INVITE": "```Invitation link: ```"
         },
+        "external_plugin": {
+            "INSTALL_DESC": "Installs external plugins.",
+            "NEED_URL": "_Need a URL! Ex:_ .install https://gist.git/tenuhSx",
+            "INVALID_URL": "_Invalid url!_",
+            "INVALID_PLUGIN": "_Error in plugin!_\n",
+            "INSTALLED": "_Installed {} ✅_",
+            "PLUGIN_DESC": "Shows the plugins that you have installed.",
+            "INSTALLED_PLUGINS": "_Total external plugins:_\n",
+            "NO_PLUGIN": "_No plugin found!_",
+            "REMOVE_DESC": "Removes plugin.",
+            "NEED_PLUGIN": "_Please give a plugin name! Ex: .remove fuck_",
+            "PLUGIN_NOT_FOUND": "Maybe you have installed such a plugin, or maybe not. But it sure isn't right now.",
+            "DELETED": "_Deleted {}!_"
+        },
         "locate": {
             "L_DESC": "It send your location.",
             "L_WARN": "Please open your location before using command!"
