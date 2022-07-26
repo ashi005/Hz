@@ -1,6 +1,6 @@
 const fs = require('fs');
 const { Sequelize } = require('sequelize');
-if (fs.existsSync('tenuh.env')) require('dotenv').tenuh({ path: './tenuh.env' });
+if (fs.existsSync('tenuh.env')) require('dotenv').config({ path: './tenuh.env' });
 function convertToBool(text, fault = 'true') {
     return text === fault ? true : false;
 }
