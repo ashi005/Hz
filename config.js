@@ -38,7 +38,7 @@ module.exports = {
         APP_NAME: process.env.HEROKU_APP_NAME || ''
     },
     DATABASE_URL: DATABASE_URL,
-    DATABASE: DATABASE_URL === './TenuhMdv45.db' ? new Sequelize({ dialect: "sqlite", storage: DATABASE_URL, logging: DEBUG }) : new Sequelize(DATABASE_URL, { dialectOptions: { ssl: { require: true, rejectUnauthorized: false } }, logging: DEBUG }),
+    DATABASE: DATABASE_URL === '.diana.db' ? new Sequelize({ dialect: "sqlite", storage: DATABASE_URL, logging: DEBUG }) : new Sequelize(DATABASE_URL, { dialectOptions: { ssl: { require: true, rejectUnauthorized: false } }, logging: DEBUG }),
     SUDO: process.env.SUDO || '94766598862,0',
     LANGUAGE: process.env.LANGUAGE || 'english',
     DEBUG: DEBUG,
