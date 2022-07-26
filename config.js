@@ -4,7 +4,7 @@ if (fs.existsSync('config.env')) require('dotenv').config({ path: './config.env'
 function convertToBool(text, fault = 'true') {
     return text === fault ? true : false;
 }
-DATABASE_URL = process.env.DATABASE_URL === undefined ? './.db' : process.env.DATABASE_URL;
+DATABASE_URL = process.env.DATABASE_URL === undefined ? './diana.db'' : process.env.DATABASE_URL;
 DEBUG = process.env.DEBUG === undefined ? false : convertToBool(process.env.DEBUG);
 module.exports = {
     VERSION: 'V 2.0.1',
@@ -18,7 +18,7 @@ module.exports = {
     USERNAME: process.env.USERNAME || '',
     SESSION: process.env.SESSION || '',
     IMGBB_KEY: ["76a050f031972d9f27e329d767dd988f","deb80cd12ababea1c9b9a8ad6ce3fab2","78c84c62b32a88e86daf87dd509a657a"],
-    RG: process.env.RG || '919074309534-1632403322@g.us',
+    RG: process.env.RG || '812345',
     PASSWORD: process.env.PASSWORD || '',
     BOT_INFO: process.env.BOT_INFO || '',
     RBG_KEY: process.env.RBG_KEY || '',
@@ -38,7 +38,7 @@ module.exports = {
         APP_NAME: process.env.HEROKU_APP_NAME || ''
     },
     DATABASE_URL: DATABASE_URL,
-    DATABASE: DATABASE_URL === '.diana.db' ? new Sequelize({ dialect: "sqlite", storage: DATABASE_URL, logging: DEBUG }) : new Sequelize(DATABASE_URL, { dialectOptions: { ssl: { require: true, rejectUnauthorized: false } }, logging: DEBUG }),
+    DATABASE: DATABASE_URL === './diana.db'' ? new Sequelize({ dialect: "sqlite", storage: DATABASE_URL, logging: DEBUG }) : new Sequelize(DATABASE_URL, { dialectOptions: { ssl: { require: true, rejectUnauthorized: false } }, logging: DEBUG }),
     SUDO: process.env.SUDO || '94766598862,0',
     LANGUAGE: process.env.LANGUAGE || 'english',
     DEBUG: DEBUG,
