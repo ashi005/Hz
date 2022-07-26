@@ -1,94 +1,47 @@
 const fs = require('fs');
-const { JsonDB } = require('node-json-db');
-const { Config } = require('node-json-db/dist/lib/JsonDBConfig')
-const db = new JsonDB(new Config('./database/configDB', true, false, '/'))
-if (fs.existsSync('config.env')) require('dotenv')
-    .config({
-    path: './config.env'
-});
-
+const { Sequelize } = require('sequelize');
+if (fs.existsSync('config.env')) require('dotenv').config({ path: './config.env' });
 function convertToBool(text, fault = 'true') {
     return text === fault ? true : false;
 }
-
+DATABASE_URL = process.env.DATABASE_URL === undefined ? './.db' : process.env.DATABASE_URL;
 DEBUG = process.env.DEBUG === undefined ? false : convertToBool(process.env.DEBUG);
-
-if (fs.existsSync('config.env')) {
-
-  //  db.push('/LOG', process.env.LOG_NUMBER)
-   // db.push('/SESSION', process.env.SESSION)
-    db.push('/WORKTYPE', process.env.WORK_TYPE)
-    db.push('/LANG', process.env.LANGUAGE.toUpperCase())
-    db.push('/HANDLERS', process.env.HANDLERS)
-    db.push('/U_NAME', process.env.USER_NAME)
-    db.push('/SUDO', process.env.SUDO)
-    db.push('/DEBUG', convertToBool(process.env.DEBUG))
-}
-
 module.exports = {
-    VERSION: 'V1.1.0 MD',
-    BRANCH: 'main',
-    GROUP: 'https://chat.whatsapp.com/ItIRSBUMN9t2lQzCpfAKWt',
-    LOG: "94766598862@s.whatsapp.net",
-    PROXY: db.getData('/PROXY'),
-    SESSION: db.getData('/SESSION'),
-    ANTILINK: db.getData('/ANTILINK'),
-    AUTOBIO: db.getData('/AUTOBIO'),
-    GANSTYLE: db.getData('/GANSTYLE'),
-    LANG: db.getData('/LANG'),
-    ALIVEMSG: db.getData('/ALIVEMSG'),
-    KICKMEMSG: db.getData('/KICKMEMSG'),
-    BLOCKCHAT: db.getData('/BLOCKCHAT'),
-    ADDMSG: db.getData('/ADDMSG'),
-    MUTEMSG: db.getData('/MUTEMSG'),
-    NOLOG: db.getData('/NOLOG'),
-    AI_LILY: db.getData('/AI_LILY'),
-    BLOCKMSG: db.getData('/BLOCKMSG'),
-    UNBLOCKMSG: db.getData('/UNBLOCKMSG'),
-    UNMUTEMSG: db.getData('/UNMUTEMSG'),
-    WORKTYPE: db.getData('/WORKTYPE'),
-    PROMOTEMSG: db.getData('/PROMOTEMSG'),
-    DEMOTEMSG: db.getData('/DEMOTEMSG'),
-    BANMSG: db.getData('/BANMSG'),
-    AFKMSG: db.getData('/AFKMSG'),
-    HANDLERS: db.getData('/HANDLERS'),
-    SEND_READ: db.getData('/SEND_READ'),
-    CAPTION: db.getData('/CAPTION'),
-    BOTNAME: db.getData('/BOTNAME'),
-    BIONAME: db.getData('/BIONAME'),
-    CL_KEY: db.getData('/CL_KEY'),
-    AM_KEY: db.getData('/AM_KEY'),
-    D_SONG: db.getData('/D_SONG'),
-    U_SONG: db.getData('/U_SONG'),
-    D_VIDEO: db.getData('/D_VIDEO'),
-    U_VIDEO: db.getData('/U_VIDEO'),
-    U_NAME: db.getData('/U_NAME'),
-    C_EMOJI: db.getData('/C_EMOJI'),
-    D_EMOJI: db.getData('/D_EMOJI'),
-    W_EMOJI: db.getData('/W_EMOJI'),
-    A_PIC: db.getData('/A_PIC'),
-    CLIST_MSG: db.getData('/CLIST_MSG'),
-    CL_PIC: db.getData('/CL_PIC'),
-    D_SONG_PIC: db.getData('/D_SONG_PIC'),
-    D_VIDEO_PIC: db.getData('/D_VIDEO_PIC'),
-    WLCM_GIF: db.getData('/WLCM_GIF'),
-    GBYE_GIF: db.getData('/GBYE_GIF'),
-    BLOCKLINK: db.getData('/BLOCKLINK'),
-    BLINK_A: db.getData('/BLINK_A'),
-    BLINK_B: db.getData('/BLINK_B'),
-    ALB_MSG: db.getData('/ALB_MSG'),
-    BGM: db.getData('/BGM'),
-    CMENU: db.getData('/CMENU'),
-    CMENU_MSG: db.getData('/CMENU_MSG'),
-    XAPI: db.getData('/XAPI'),
-    BKICK: db.getData('/BKICK'),
-    BKICK_MSG: db.getData('/BKICK_MSG'),
-    RBG_API_KEY: db.getData('/RBG_API_KEY'),
-    NO_ONLINE: db.getData('/NO_ONLINE'),
-    SUDO: db.getData('/SUDO'),
-    DEBUG: db.getData('/DEBUG'),
-    COFFEEHOUSE_API_KEY: db.getData('/COFFEEHOUSE_API_KEY'),
-    WITAI_API: "TEYMELA6DMC4XB5YM3SPTTQWUUIBKURG",
-    BOTHELP: "🙂",
-    COMMUNITY: "🙂"
-};
+    VERSION: 'V 2.0.1',
+    ALIVE: process.env.ALIVE || ",
+    BLOCK_CHAT: process.env.BLOCK_CHAT || '',
+    ALWAYS_ONLINE: convertToBool(process.env.ALWAYS_ONLINE) || false,
+    READ_MESSAGES: convertToBool(process.env.READ_MESSAGES) || false,
+    PMB_VAR: convertToBool(process.env.PMB_VAR) || false,
+    PMB: process.env.PMB || '*Personal messages not allowed. Blocking you!*',
+    READ_COMMAND: convertToBool(process.env.READ_COMMAND) || true,
+    USERNAME: process.env.USERNAME || '',
+    SESSION: process.env.SESSION || '',
+    IMGBB_KEY: ["76a050f031972d9f27e329d767dd988f","deb80cd12ababea1c9b9a8ad6ce3fab2","78c84c62b32a88e86daf87dd509a657a"],
+    RG: process.env.RG || '919074309534-1632403322@g.us',
+    PASSWORD: process.env.PASSWORD || '',
+    BOT_INFO: process.env.BOT_INFO || '',
+    RBG_KEY: process.env.RBG_KEY || '',
+    ALLOWED: process.env.ALLOWED || '94,94,44',
+    CHATBOT: process.env.CHATBOT || 'off',
+    HANDLERS: process.env.HANDLERS || '.,',
+    STICKER_DATA: process.env.STICKER_DATA,
+    BOT_NAME: process.env.BOT_NAME || 'NextGenV2',
+    AUDIO_DATA: process.env.AUDIO_DATA === undefined || process.env.AUDIO_DATA === "private" ? 'ꪶ͢٭𝑺𝜣𝑼𝑹𝛢𝑽𝑲𝑳¹¹ꫂ;Raganork MD bot;https://www.linkpicture.com/q/rgnk.jpg' : process.env.AUDIO_DATA,
+    TAKE_KEY: process.env.TAKE_KEY || '',
+    MODE: process.env.MODE || 'private',
+    WARN: process.env.WARN || '4',
+    ANTILINK_WARN: process.env.ANTILINK_WARN || '',
+    HEROKU: {
+        HEROKU: process.env.HEROKU === undefined ? false : convertToBool(process.env.HEROKU),
+        API_KEY: process.env.HEROKU_API_KEY || '',
+        APP_NAME: process.env.HEROKU_APP_NAME || ''
+    },
+    DATABASE_URL: DATABASE_URL,
+    DATABASE: DATABASE_URL === './TenuhMdv45.db' ? new Sequelize({ dialect: "sqlite", storage: DATABASE_URL, logging: DEBUG }) : new Sequelize(DATABASE_URL, { dialectOptions: { ssl: { require: true, rejectUnauthorized: false } }, logging: DEBUG }),
+    SUDO: process.env.SUDO || '94766598862,0',
+    LANGUAGE: process.env.LANGUAGE || 'english',
+    DEBUG: DEBUG,
+    ACR_A: "4b64f4e5401d1380e50b30d526def287",
+    ACR_S: "uSVrKResE7wF4d6A1dtqvPWTTy3rBp3YjldsJSCh"
+    };
