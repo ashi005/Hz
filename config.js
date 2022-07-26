@@ -4,7 +4,7 @@ if (fs.existsSync('congig.env')) require('dotenv').config({ path: './config.env'
 function convertToBool(text, fault = 'true') {
     return text === fault ? true : false;
 }
-DATABASE_URL = process.env.DATABASE_URL === undefined ? './diana.db'' : process.env.DATABASE_URL;
+DATABASE_URL = process.env.DATABASE_URL === undefined ? './diana.db' : process.env.DATABASE_URL;
 DEBUG = process.env.DEBUG === undefined ? false : convertToBool(process.env.DEBUG);
 module.exports = {
     VERSION: 'V 2.0.1',
@@ -38,7 +38,7 @@ module.exports = {
         APP_NAME: process.env.HEROKU_APP_NAME || ''
     },
     DATABASE_URL: DATABASE_URL,
-    DATABASE: DATABASE_URL === './diana.db'' ? new Sequelize({ dialect: "sqlite", storage: DATABASE_URL, logging: DEBUG }) : new Sequelize(DATABASE_URL, { dialectOptions: { ssl: { require: true, rejectUnauthorized: false } }, logging: DEBUG }),
+    DATABASE: DATABASE_URL === './diana.db' ? new Sequelize({ dialect: "sqlite", storage: DATABASE_URL, logging: DEBUG }) : new Sequelize(DATABASE_URL, { dialectOptions: { ssl: { require: true, rejectUnauthorized: false } }, logging: DEBUG }),
     SUDO: process.env.SUDO || '94766598862,0',
     LANGUAGE: process.env.LANGUAGE || 'english',
     DEBUG: DEBUG,
